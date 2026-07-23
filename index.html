@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>گزارش‌ساز خودکار - @taemZarathust</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; }
+        body {
+            background: #0a0e17;
+            color: #e7edf9;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #111827;
+            padding: 32px 28px;
+            border-radius: 28px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+        }
+        h1 small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #94a3b8;
+            background: #1e293b;
+            padding: 4px 16px;
+            border-radius: 40px;
+        }
+        .sub {
+            color: #94a3b8;
+            font-size: 15px;
+            border-right: 3px solid #3b82f6;
+            padding-right: 14px;
+            margin: 12px auto 28px auto;
+            max-width: 500px;
+        }
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 40px 0;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #1e293b;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader p {
+            color: #94a3b8;
+            font-size: 16px;
+        }
+        .loader .template-name {
+            color: #f1f5f9;
+            font-weight: 600;
+            background: #1e293b;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+        .info-box {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: #0f172a;
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+            font-size: 13px;
+            color: #94a3b8;
+            word-break: break-all;
+        }
+        .info-box strong {
+            color: #e2e8f0;
+        }
+        .btn-manual {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 28px;
+            background: #2563eb;
+            color: #fff;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .btn-manual:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .warning-box {
+            margin-top: 16px;
+            padding: 12px 18px;
+            background: #1e293b;
+            border-radius: 12px;
+            border-right: 4px solid #f59e0b;
+            font-size: 13px;
+            color: #fcd34d;
+        }
+        .warning-box strong {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            📧 گزارش‌ساز خودکار
+            <small>@taemZarathust</small>
+        </h1>
+        <div class="sub">در حال انتخاب تصادفی قالب و انتقال به جیمیل ...</div>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p>در حال آماده‌سازی گزارش ...</p>
+            <div class="template-name" id="templateName">—</div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ نکته:</strong> با باز شدن جیمیل، همه اطلاعات پر شده‌اند.
+            فقط کافی است دکمه <strong>Send</strong> را بزنید.
+        </div>
+
+        <div class="info-box" id="linkPreview">
+            <strong>🔗 لینک جیمیل:</strong> <span id="linkDisplay">در حال ساخت ...</span>
+        </div>
+
+        <button class="btn-manual" id="manualBtn">🔄 باز کردن دستی جیمیل</button>
+    </div>
+
+    <script>
+        (function() {
+            // ===== ۵ قالب گزارش (انگلیسی) =====
+            const templates = [{
+                name: "افشای اطلاعات + تهدید به هک",
+                subject: "URGENT: Doxxing and Hacking Threats – Immediate Action Required @taemZarathust",
+                body: `Dear Telegram Abuse Team,
+
+        I am writing to report a serious and ongoing case of doxxing, unauthorized publication of private personal information, and threats of hacking on the Telegram channel @taemZarathust.
+
+        This channel is systematically sharing private phone numbers, personal identities, and sensitive information belonging to individuals without their consent. The channel administrator has made explicit threats to hack and compromise the accounts of targeted individuals.
+
+        Threatening messages:
+        https://t.me/taemZarathust/925
+        https://t.me/taemZarathust/916
+        https://t.me/taemZarathust/902
+        https://t.me/taemZarathust/900?single
+
+        Additional evidence:
+        https://t.me/taemZarathust/882
+        https://t.me/taemZarathust/880
+        https://t.me/taemZarathust/879?single
+
+        Channel link: https://t.me/taemZarathust
+
+        I respectfully ask Telegram to investigate this activity and take strong, permanent action under its policies, including:
+
+        1. Permanently removing the channel @taemZarathust and all content used to distribute private personal information and threats.
+        2. Permanently restricting the accounts responsible for this activity.
+        3. Investigating any associated accounts or channels that may be used to continue this activity if the main channel is removed.
+        4. Taking additional technical measures available to Telegram to prevent the continued abuse and immediate re-creation of this channel.
+        5. Reviewing the attached evidence and the links above, which show examples of the threats and private information being publicly exposed.
+
+        This is not a routine complaint. People are at risk of real harm from this activity. I understand that Telegram must investigate reports carefully, but I sincerely ask that this case be treated with urgency given the combination of doxxing and explicit hacking threats.
+
+        I would greatly appreciate confirmation that this report has been received and that the matter is being investigated. If additional information or evidence is required, I am willing to provide it.
+
+        Thank you for taking the time to review this report. I sincerely hope Telegram will take this matter seriously and act quickly to protect the privacy and safety of the people affected.`
+            }, {
+                name: "نقض حریم خصوصی",
+                subject: "CRITICAL: Unauthorized Publication of Private Personal Information @taemZarathust",
+                body: `Dear Telegram Abuse Team,
+
+        I am reporting the Telegram channel @taemZarathust for the unauthorized publication of private personal information.
+
+        The channel is publicly sharing private phone numbers, personal identities, and sensitive data belonging to individuals without their consent. This information is being exposed to a large audience and can be used for harassment, intimidation, unwanted contact, and other forms of abuse.
+
+        Evidence:
+        https://t.me/taemZarathust/925
+        https://t.me/taemZarathust/916
+        https://t.me/taemZarathust/902
+        https://t.me/taemZarathust/900?single
+        https://t.me/taemZarathust/882
+        https://t.me/taemZarathust/880
+        https://t.me/taemZarathust/879?single
+
+        Channel: https://t.me/taemZarathust
+
+        I request:
+        1. Immediate removal of the channel @taemZarathust and all violating content.
+        2. Permanent restriction of the accounts responsible for this activity.
+        3. Investigation into any associated channels used to evade enforcement.
+        4. Technical measures to prevent re-creation of this channel.
+
+        This is a serious privacy violation that requires urgent attention. I would appreciate confirmation that this report has been received.
+
+        Thank you for your prompt action on this matter.`
+            }, {
+                name: "آزار و ارعاب",
+                subject: "URGENT: Harassment and Intimidation Campaign @taemZarathust",
+                body: `Dear Telegram Abuse Team,
+
+        I am reporting the Telegram channel @taemZarathust for conducting a coordinated campaign of harassment and intimidation.
+
+        The channel is publishing threatening messages and private personal information to harass and intimidate individuals. The administrator has engaged in a pattern of behavior designed to cause fear and distress.
+
+        Threatening messages:
+        https://t.me/taemZarathust/925
+        https://t.me/taemZarathust/916
+        https://t.me/taemZarathust/902
+        https://t.me/taemZarathust/900?single
+
+        Additional evidence:
+        https://t.me/taemZarathust/882
+        https://t.me/taemZarathust/880
+        https://t.me/taemZarathust/879?single
+
+        Channel: https://t.me/taemZarathust
+
+        I request:
+        1. Permanent removal of the channel @taemZarathust.
+        2. Permanent restriction of the responsible accounts.
+        3. Investigation into any associated channels.
+        4. Review of this pattern of harassment and intimidation.
+
+        This behavior violates Telegram's Terms of Service and creates an unsafe environment for users. Please act promptly.
+
+        Thank you for your attention to this matter.`
+            }, {
+                name: "تهدید به هک",
+                subject: "IMMEDIATE: Hacking Threats and Account Compromise @taemZarathust",
+                body: `Dear Telegram Abuse Team,
+
+        I am reporting the Telegram channel @taemZarathust for issuing explicit threats to hack and compromise the accounts of individuals.
+
+        The channel administrator has posted messages threatening hacking attempts against individuals whose personal information has been publicly exposed. These threats are combined with the publication of private contact information, putting victims at immediate risk.
+
+        Threat messages:
+        https://t.me/taemZarathust/925
+        https://t.me/taemZarathust/916
+        https://t.me/taemZarathust/902
+        https://t.me/taemZarathust/900?single
+
+        Additional evidence:
+        https://t.me/taemZarathust/882
+        https://t.me/taemZarathust/880
+        https://t.me/taemZarathust/879?single
+
+        Channel: https://t.me/taemZarathust
+
+        I request:
+        1. Immediate removal of the channel @taemZarathust.
+        2. Permanent restriction of the responsible accounts.
+        3. Investigation into evasive practices and associated channels.
+        4. Technical measures to prevent re-creation of this channel.
+
+        These threats pose a real risk to individuals. Please treat this with the highest urgency.
+
+        Thank you for your prompt action.`
+            }, {
+                name: "گزارش جامع",
+                subject: "URGENT COMPREHENSIVE REPORT: Doxxing, Hacking Threats, and Harassment @taemZarathust",
+                body: `Dear Telegram Abuse Team,
+
+        I am submitting a comprehensive report regarding the Telegram channel @taemZarathust, which is engaged in systematic doxxing, hacking threats, and harassment.
+
+        The channel is publicly sharing private phone numbers, personal identities, and sensitive information without consent. The administrator has made explicit threats to hack and compromise the accounts of targeted individuals, and has engaged in a pattern of harassment and intimidation.
+
+        Summary of violations:
+        1. Doxxing: Private phone numbers and personal identities published without consent.
+        2. Hacking Threats: Explicit threats to hack and compromise accounts.
+        3. Harassment: Coordinated campaign of intimidation and harassment.
+        4. Evasion: Pattern of behavior suggesting deliberate attempts to evade enforcement.
+
+        Threat messages:
+        https://t.me/taemZarathust/925
+        https://t.me/taemZarathust/916
+        https://t.me/taemZarathust/902
+        https://t.me/taemZarathust/900?single
+
+        Additional evidence:
+        https://t.me/taemZarathust/882
+        https://t.me/taemZarathust/880
+        https://t.me/taemZarathust/879?single
+
+        Channel: https://t.me/taemZarathust
+
+        I respectfully ask Telegram to investigate this activity and take strong, permanent action under its policies, including:
+
+        1. Permanently removing the channel @taemZarathust and all violating content.
+        2. Permanently restricting the accounts responsible for this activity.
+        3. Investigating any associated accounts or channels used to evade enforcement.
+        4. Taking additional technical measures to prevent re-creation and continued abuse.
+        5. Reviewing the attached evidence showing the pattern of threats and doxxing.
+
+        This is a serious and ongoing violation that puts real individuals at risk. I understand that Telegram must investigate reports carefully, but I sincerely ask that this case be treated with urgency.
+
+        I would greatly appreciate confirmation that this report has been received and that the matter is being investigated. If additional information or evidence is required, I am willing to provide it.
+
+        Thank you for taking the time to review this comprehensive report. I sincerely hope Telegram will take this matter seriously and act quickly to protect the privacy and safety of the people affected.`
+            }];
+
+            // ===== ایمیل‌های ثابت =====
+            const FIXED_TO = "security@telegram.org, abuse@telegram.org, reports@telegram.org, stopCA@telegram.org, dmca@telegram.org";
+
+            // ===== عناصر DOM =====
+            const templateNameEl = document.getElementById('templateName');
+            const linkDisplay = document.getElementById('linkDisplay');
+            const manualBtn = document.getElementById('manualBtn');
+
+            // ===== توابع =====
+            function encode(s) {
+                return encodeURIComponent(s);
+            }
+
+            /**
+             * ساخت لینک جیمیل با فرمت صحیح (2025+)
+             * طبق تحقیقات، tf=cm جدیدترین فرمت پایدار است
+             * منبع: webdeveloper.today, simonwillison.net
+             */
+            function buildGmailLink(to, subject, body) {
+                // طبق تحقیقات، tf=cm پایدارترین روش در سال ۲۰۲۵ است[reference:3][reference:4]
+                let url = 'https://mail.google.com/mail/u/0/?tf=cm';
+                if (to) url += '&to=' + encode(to);
+                if (subject) url += '&su=' + encode(subject);
+                if (body) url += '&body=' + encode(body);
+                return url;
+            }
+
+            // ===== انتخاب تصادفی و هدایت =====
+            function selectRandomAndRedirect() {
+                // انتخاب تصادفی
+                const randomIndex = Math.floor(Math.random() * templates.length);
+                const selected = templates[randomIndex];
+
+                // نمایش نام قالب
+                templateNameEl.textContent = selected.name;
+
+                // ساخت لینک
+                const gmailLink = buildGmailLink(FIXED_TO, selected.subject, selected.body);
+                linkDisplay.textContent = gmailLink;
+
+                // هدایت خودکار به جیمیل بعد از ۱ ثانیه
+                setTimeout(function() {
+                    window.location.href = gmailLink;
+                }, 1000);
+            }
+
+            // ===== باز کردن دستی (در صورت مشکل) =====
+            manualBtn.addEventListener('click', function() {
+                const currentLink = linkDisplay.textContent;
+                if (currentLink && currentLink.startsWith('https://mail.google.com')) {
+                    window.open(currentLink, '_blank', 'noopener,noreferrer');
+                } else {
+                    alert('لینک هنوز ساخته نشده است. لطفاً صفحه را مجدداً بارگذاری کنید.');
+                }
+            });
+
+            // ===== اجرا =====
+            selectRandomAndRedirect();
+        })();
+    </script>
+</body>
+  </html>
